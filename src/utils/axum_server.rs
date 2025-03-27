@@ -1,11 +1,10 @@
 use crate::config::config_models::DotEnvConfig;
-use crate::route::router::create_routes;
-use crate::services::users::http::adap_http::UserHandler;
 use anyhow::Result;
 use axum::http::Method;
 use axum::http::StatusCode;
 use axum::response::IntoResponse;
 use axum::routing::get;
+use axum::Router;
 use std::net::SocketAddr;
 use std::sync::Arc;
 use std::time::Duration;
@@ -23,12 +22,12 @@ pub async fn health_check() -> impl IntoResponse {
     (StatusCode::OK, "Rust!!").into_response()
 }
 
-pub async fn start(config: Arc<DotEnvConfig>, user_handler: Arc<UserHandler>) -> Result<()> {
+pub async fn start(config: Arc<DotEnvConfig>, user_route: Router) -> Result<()> {
     // Create main router with all routes
     let app = axum::Router::new()
         .fallback(not_found)
         .route("/health", get(health_check))
-        .nest("/v1", create_routes(user_handler))
+        .nest("/v1", user_route)
         .layer(TimeoutLayer::new(Duration::from_secs(
             config.server.timeout,
         )))

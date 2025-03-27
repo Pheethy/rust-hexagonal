@@ -1,4 +1,5 @@
 use rust_hexagonal::config::config_loader;
+use rust_hexagonal::route::router::register_user;
 use rust_hexagonal::services::users::http::adap_http::UserHandler;
 use rust_hexagonal::services::users::repository::adap_repository::UserRepository;
 use rust_hexagonal::services::users::usecase::adap_usecase::UserUsecase;
@@ -9,7 +10,7 @@ use std::sync::Arc;
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt()
-        .with_max_level(tracing::Level::DEBUG)
+        .with_max_level(tracing::Level::TRACE)
         .init();
 
     let dot_env = match config_loader::load_config() {
@@ -38,7 +39,8 @@ async fn main() {
     /* Init Handler */
     let user_handler = Arc::new(UserHandler::new(Arc::new(user_usecase)));
 
-    match start(Arc::new(dot_env), user_handler).await {
+    /* Start Server */
+    match start(Arc::new(dot_env), register_user(user_handler)).await {
         Ok(_) => {}
         Err(e) => {
             tracing::error!("Failed to start server: {}", e);

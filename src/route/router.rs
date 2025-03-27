@@ -10,7 +10,7 @@ async fn fetch_all_users_handler(
     user_handler.fetch_all_users().await
 }
 
-pub fn create_routes(user_handler: Arc<UserHandler>) -> Router {
+pub fn register_user(user_handler: Arc<UserHandler>) -> Router {
     // Cast UserHandler to Arc<dyn IUserHandler>
     let user_handler_trait: Arc<dyn IUserHandler> = user_handler;
 
