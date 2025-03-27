@@ -1,0 +1,3 @@
+ALTER TABLE "department" DROP CONSTRAINT "unique_name";
+
+DROP TABLE "department";

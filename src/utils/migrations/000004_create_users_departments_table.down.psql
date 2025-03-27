@@ -1,0 +1,4 @@
+ALTER TABLE "users_departments" DROP CONSTRAINT "fk_users_departments_users";
+ALTER TABLE "users_departments" DROP CONSTRAINT "fk_users_departments_department";
+
+DROP TABLE "users_departments";

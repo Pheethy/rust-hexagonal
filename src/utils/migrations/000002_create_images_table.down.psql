@@ -1,0 +1,4 @@
+ALTER TABLE "images" DROP CONSTRAINT "unique_filename";
+ALTER TABLE "images" DROP CONSTRAINT "fk_images_users";
+
+DROP TABLE "images";

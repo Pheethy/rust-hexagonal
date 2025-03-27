@@ -1,0 +1,23 @@
+-- Create transaction --
+BEGIN;
+
+-- set time zone --
+SET TIME ZONE 'Asia/Bangkok';
+
+-- install Extension UUID --
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TABLE "users" (
+  "id" UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  "username" VARCHAR,
+  "password" VARCHAR,
+  "email" VARCHAR,
+  "created_at" TIMESTAMP DEFAULT Now(),
+  "updated_at" TIMESTAMP DEFAULT Now()
+);
+
+ALTER TABLE "users" ADD CONSTRAINT "unique_username" UNIQUE ("username");
+ALTER TABLE "users" ADD CONSTRAINT "unique_email" UNIQUE ("email");
+
+END;
+

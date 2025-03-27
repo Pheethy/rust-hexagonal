@@ -1,0 +1,8 @@
+CREATE TABLE "users_departments" (
+  "id" UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  "user_id" UUID NOT NULL,
+  "department_id" UUID NOT NULL
+);
+
+ALTER TABLE "users_departments" ADD CONSTRAINT "fk_users_departments_users" FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+ALTER TABLE "users_departments" ADD CONSTRAINT "fk_users_departments_department" FOREIGN KEY ("department_id") REFERENCES "department" ("id");

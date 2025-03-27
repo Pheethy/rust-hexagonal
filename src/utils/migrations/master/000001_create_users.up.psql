@@ -1,0 +1,3 @@
+INSERT INTO "users" ("id", "username", "password", "email", "created_at", "updated_at") VALUES
+('78c8d02f-be42-4a97-901d-a1924f389e5f', 'aine', 'aine1234', 'aine@gmail.com', '2025-03-01 12:00:00', '2025-03-01 12:00:00'),
+('5f58c208-634d-4277-bd6f-e37989e36be4', 'pheet', 'pheet1234', 'pheet@gmail.com', '2025-03-01 12:00:00', '2025-03-01 12:00:00');
