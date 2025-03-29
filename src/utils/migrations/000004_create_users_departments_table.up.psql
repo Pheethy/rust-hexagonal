@@ -5,4 +5,4 @@ CREATE TABLE "users_departments" (
 );
 
 ALTER TABLE "users_departments" ADD CONSTRAINT "fk_users_departments_users" FOREIGN KEY ("user_id") REFERENCES "users" ("id");
-ALTER TABLE "users_departments" ADD CONSTRAINT "fk_users_departments_department" FOREIGN KEY ("department_id") REFERENCES "department" ("id");
+ALTER TABLE "users_departments" ADD CONSTRAINT "fk_users_departments_department" FOREIGN KEY ("department_id") REFERENCES "departments" ("id");

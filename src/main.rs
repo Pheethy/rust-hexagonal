@@ -10,7 +10,7 @@ use std::sync::Arc;
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt()
-        .with_max_level(tracing::Level::TRACE)
+        .with_max_level(tracing::Level::INFO)
         .init();
 
     let dot_env = match config_loader::load_config() {

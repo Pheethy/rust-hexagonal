@@ -1,0 +1,20 @@
+services:
+  rust-hexagonal:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    container_name: rust-hexagonal
+    ports:
+      - "8080:8080"
+    environment:
+      - DATABASE_URL=postgres://postgres:pheet1234@172.22.0.2:5432/pheet_db_dev?sslmode=disable
+      - SERVER_PORT=8080
+      - SERVER_BODY_LIMIT=1048576
+      - SERVER_TIMEOUT=30
+      - STAGE=Development
+    networks:
+      - rust-hexagonal
+
+networks:
+  rust-hexagonal:
+    driver: bridge

@@ -1,4 +1,4 @@
-CREATE TABLE "department" (
+CREATE TABLE "departments" (
   "id" UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   "name" VARCHAR,
   "description" VARCHAR,
@@ -6,5 +6,5 @@ CREATE TABLE "department" (
   "updated_at" TIMESTAMP DEFAULT Now()
 );
 
-ALTER TABLE "department" ADD CONSTRAINT "unique_name" UNIQUE ("name");
+ALTER TABLE "departments" ADD CONSTRAINT "unique_name" UNIQUE ("name");
 

@@ -6,8 +6,8 @@ use axum::{http::StatusCode, Json};
 use serde::Serialize;
 use std::sync::Arc;
 use tracing::{error, info};
+use uuid::Uuid;
 
-// Define ApiResponse for responses
 #[derive(Debug, Serialize)]
 pub struct ApiResponse<T> {
     pub success: bool,
@@ -15,7 +15,6 @@ pub struct ApiResponse<T> {
     pub data: Option<T>,
 }
 
-// UserHandler struct
 pub struct UserHandler {
     pub user_usecase: Arc<dyn IUserUsecase>,
 }
@@ -45,6 +44,30 @@ impl IUserHandler for UserHandler {
                 let response = ApiResponse::<Vec<User>> {
                     success: false,
                     message: format!("Failed to fetch users: {}", e),
+                    data: None,
+                };
+                (StatusCode::INTERNAL_SERVER_ERROR, Json(response))
+            }
+        }
+    }
+
+    async fn fetch_user_by_id(&self, id: Uuid) -> (StatusCode, Json<ApiResponse<User>>) {
+        info!("HTTP handler: Fetching user by id");
+
+        match self.user_usecase.fetch_user_by_id(id).await {
+            Ok(user) => {
+                let response = ApiResponse {
+                    success: true,
+                    message: "User fetched successfully".to_string(),
+                    data: Some(user),
+                };
+                (StatusCode::OK, Json(response))
+            }
+            Err(e) => {
+                error!("Failed to fetch user by id: {}", e);
+                let response = ApiResponse::<User> {
+                    success: false,
+                    message: format!("Failed to fetch user by id: {}", e),
                     data: None,
                 };
                 (StatusCode::INTERNAL_SERVER_ERROR, Json(response))

@@ -3,6 +3,7 @@ use crate::services::users::port_repository::IUserRepository;
 use crate::services::users::port_usecase::IUserUsecase;
 use anyhow::Result;
 use async_trait::async_trait;
+use uuid::Uuid;
 
 pub struct UserUsecase {
     pub user_repository: Box<dyn IUserRepository>,
@@ -22,6 +23,16 @@ impl IUserUsecase for UserUsecase {
             Err(e) => {
                 tracing::error!("Failed to fetch users: {}", e);
                 Err(anyhow::anyhow!("Failed to fetch users: {}", e))
+            }
+        }
+    }
+
+    async fn fetch_user_by_id(&self, id: Uuid) -> Result<User> {
+        match self.user_repository.fetch_user_by_id(id).await {
+            Ok(user) => Ok(user),
+            Err(e) => {
+                tracing::error!("Failed to fetch user by id: {}", e);
+                Err(anyhow::anyhow!("Failed to fetch user by id: {}", e))
             }
         }
     }
