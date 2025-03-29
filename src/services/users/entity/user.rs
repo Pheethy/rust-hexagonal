@@ -24,6 +24,21 @@ pub struct User {
     pub departments: Vec<Department>,
 }
 
+impl User {
+    pub fn new_id(&mut self) {
+        let id = Uuid::new_v4();
+        self.id = id;
+    }
+
+    pub fn set_created_at(&mut self) {
+        self.created_at = Utc::now();
+    }
+
+    pub fn set_updated_at(&mut self) {
+        self.updated_at = Utc::now();
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Department {
     pub id: Uuid,

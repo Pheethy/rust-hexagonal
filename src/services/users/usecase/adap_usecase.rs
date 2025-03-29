@@ -37,7 +37,10 @@ impl IUserUsecase for UserUsecase {
         }
     }
 
-    async fn register_user(&self, user: User) -> Result<User> {
+    async fn register_user(&self, user: &mut User) -> Result<User> {
+        user.new_id();
+        user.set_created_at();
+        user.set_updated_at();
         match self.user_repository.register_user(user).await {
             Ok(user) => Ok(user),
             Err(e) => {

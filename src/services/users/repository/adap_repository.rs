@@ -158,7 +158,7 @@ impl IUserRepository for UserRepository {
         return Ok(user);
     }
 
-    async fn register_user(&self, user: User) -> Result<User> {
+    async fn register_user(&self, user: &mut User) -> Result<(User)> {
         let script_sql = r#"
             INSERT INTO users (
                 id,
@@ -199,6 +199,6 @@ impl IUserRepository for UserRepository {
             departments: vec![],
         };
 
-        Ok(registered_user)
+        return Ok(registered_user);
     }
 }

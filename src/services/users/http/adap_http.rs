@@ -74,4 +74,28 @@ impl IUserHandler for UserHandler {
             }
         }
     }
+
+    async fn register_user(&self, user: &mut User) -> (StatusCode, Json<ApiResponse<User>>) {
+        info!("HTTP handler: Registering user");
+
+        match self.user_usecase.register_user(user).await {
+            Ok(user) => {
+                let response = ApiResponse {
+                    success: true,
+                    message: "User registered successfully".to_string(),
+                    data: Some(user),
+                };
+                (StatusCode::OK, Json(response))
+            }
+            Err(e) => {
+                error!("Failed to register user: {}", e);
+                let response = ApiResponse {
+                    success: false,
+                    message: format!("Failed to register user: {}", e),
+                    data: None,
+                };
+                (StatusCode::INTERNAL_SERVER_ERROR, Json(response))
+            }
+        }
+    }
 }
