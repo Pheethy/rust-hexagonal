@@ -1,4 +1,4 @@
-use crate::services::users::entity::user::User;
+use crate::services::users::entity::user::{User, UserResponse};
 use crate::services::users::port_http::IUserHandler;
 use crate::services::users::port_usecase::IUserUsecase;
 use async_trait::async_trait;
@@ -75,15 +75,22 @@ impl IUserHandler for UserHandler {
         }
     }
 
-    async fn register_user(&self, user: &mut User) -> (StatusCode, Json<ApiResponse<User>>) {
+    async fn register_user(
+        &self,
+        user: &mut User,
+    ) -> (StatusCode, Json<ApiResponse<UserResponse>>) {
         info!("HTTP handler: Registering user");
 
         match self.user_usecase.register_user(user).await {
             Ok(user) => {
                 let response = ApiResponse {
                     success: true,
-                    message: "User registered successfully".to_string(),
-                    data: Some(user),
+                    message: format!("user {} registered successfully", user.username),
+                    data: Some(UserResponse {
+                        id: user.id,
+                        email: user.email,
+                        username: user.username,
+                    }),
                 };
                 (StatusCode::OK, Json(response))
             }

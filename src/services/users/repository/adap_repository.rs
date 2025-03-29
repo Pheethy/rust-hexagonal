@@ -158,7 +158,7 @@ impl IUserRepository for UserRepository {
         return Ok(user);
     }
 
-    async fn register_user(&self, user: &mut User) -> Result<(User)> {
+    async fn register_user(&self, user: &mut User) -> Result<User> {
         let script_sql = r#"
             INSERT INTO users (
                 id,
@@ -172,9 +172,9 @@ impl IUserRepository for UserRepository {
                 $2::text,
                 $3::text,
                 $4::text,
-                $5::timestamptz,
-                $6::timestamptz
-            );
+                $5::timestamp,
+                $6::timestamp
+            ) RETURNING *;
         "#;
 
         let row = sqlx::query(script_sql)
@@ -188,7 +188,7 @@ impl IUserRepository for UserRepository {
             .await
             .map_err(|e| anyhow::anyhow!("Failed to register user: {}", e))?;
 
-        let registered_user = User {
+        let user_result = User {
             id: row.get("id"),
             username: row.get("username"),
             password: row.get("password"),
@@ -199,6 +199,6 @@ impl IUserRepository for UserRepository {
             departments: vec![],
         };
 
-        return Ok(registered_user);
+        Ok(user_result)
     }
 }

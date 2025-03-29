@@ -1,3 +1,4 @@
+use axum::extract::Multipart;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
@@ -39,6 +40,38 @@ impl User {
     }
 }
 
+impl User {
+    pub fn new() -> Self {
+        User {
+            id: Uuid::new_v4(),
+            email: String::new(),
+            username: String::new(),
+            password: String::new(),
+            created_at: Utc::now(),
+            updated_at: Utc::now(),
+            images: vec![],
+            departments: vec![],
+        }
+    }
+}
+
+pub async fn new_user_with_multipart(mut multipart: Multipart) -> User {
+    let mut user: User = User::new();
+    /* :Change: multipart to user object */
+    while let Ok(Some(field)) = multipart.next_field().await {
+        if let Some(name) = field.name() {
+            match name {
+                "email" => user.email = field.text().await.unwrap(),
+                "username" => user.username = field.text().await.unwrap(),
+                "password" => user.password = field.text().await.unwrap(),
+                _ => (),
+            }
+        }
+    }
+
+    user
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Department {
     pub id: Uuid,
@@ -46,4 +79,11 @@ pub struct Department {
     pub description: String,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
+}
+
+#[derive(Debug, Serialize)]
+pub struct UserResponse {
+    pub id: Uuid,
+    pub email: String,
+    pub username: String,
 }

@@ -1,9 +1,9 @@
-use crate::services::users::entity::user::User;
+use crate::services::users::entity::user;
 use crate::services::users::http::adap_http::UserHandler;
 use crate::services::users::port_http::IUserHandler;
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Json};
-use axum::{extract::State, routing::get, routing::post, Router};
+use axum::{extract::Multipart, extract::State, routing::get, routing::post, Router};
 use serde_json::json;
 use std::sync::Arc;
 use uuid::Uuid;
@@ -30,8 +30,9 @@ async fn fetch_user_by_id_handler(
 
 async fn register_user_handler(
     State(user_handler): State<Arc<dyn IUserHandler>>,
-    axum::extract::Json(mut user): axum::extract::Json<User>,
-) -> impl axum::response::IntoResponse {
+    multipart: Multipart,
+) -> impl IntoResponse {
+    let mut user = user::new_user_with_multipart(multipart).await;
     user_handler.register_user(&mut user).await
 }
 

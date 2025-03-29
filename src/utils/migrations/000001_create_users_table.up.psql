@@ -12,8 +12,8 @@ CREATE TABLE "users" (
   "username" VARCHAR,
   "password" VARCHAR,
   "email" VARCHAR,
-  "created_at" TIMESTAMP DEFAULT Now(),
-  "updated_at" TIMESTAMP DEFAULT Now()
+  "created_at" TIMESTAMPTZ DEFAULT Now(),
+  "updated_at" TIMESTAMPTZ DEFAULT Now()
 );
 
 ALTER TABLE "users" ADD CONSTRAINT "unique_username" UNIQUE ("username");
